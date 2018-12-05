@@ -15,7 +15,7 @@ func InspectSlice(intSlice []int) {
 	slicePtr := unsafe.Pointer(&intSlice)
 	ptrSize := unsafe.Sizeof(slicePtr)
 
-	// Get address of len and cap
+	// Compute addresses of len and cap
 	lenAddr := uintptr(slicePtr) + ptrSize
 	capAddr := uintptr(slicePtr) + (ptrSize * 2)
 
