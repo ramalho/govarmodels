@@ -28,13 +28,13 @@ func InspectSlice(intSlice []int) {
 
 	fmt.Println("intSlice:")
 
-	fmt.Printf("\t@%p: array %T = %p\n", slicePtr, arrayPtr, arrayPtr)
+	fmt.Printf("\t@%p: data %T = %p\n", slicePtr, arrayPtr, arrayPtr)
 
 	fmt.Printf("\t@%p: len %T = %d\n", lenPtr, *lenPtr, *lenPtr)
 
 	fmt.Printf("\t@%p: cap %T = %d\n", capPtr, *capPtr, *capPtr)
 
-	fmt.Println()
+	fmt.Println("data:")
 
 	fmt.Printf("\t@%p: %T\n", arrayPtr, *arrayPtr)
 
