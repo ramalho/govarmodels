@@ -5,7 +5,6 @@ import (
 	"unsafe"
 )
 
-
 func InspectSlice(intSlice []int) {
 
 	fmt.Println("intSlice:")
@@ -24,11 +23,14 @@ func InspectSlice(intSlice []int) {
 	capPtr := (*int)(unsafe.Pointer(capAddr))
 
 	// Get pointer to underlying array
-	arrayPtr := (*[5]int)(unsafe.Pointer(*(*uintptr)(slicePtr)))
+	// How to do this without hardcoding the array size?
+	arrayPtr := (*[100]int)(unsafe.Pointer(*(*uintptr)(slicePtr)))
 
 	fmt.Println("intSlice:")
 
-	fmt.Printf("\t@%p: data %T = %p\n", slicePtr, arrayPtr, arrayPtr)
+	// Not using %T on next line to show expected data array size
+	// fmt.Printf("\t@%p: data %T = %p\n", slicePtr, arrayPtr, arrayPtr)
+	fmt.Printf("\t@%p: data *[%d]int = %p\n", slicePtr, *capPtr, arrayPtr)
 
 	fmt.Printf("\t@%p: len %T = %d\n", lenPtr, *lenPtr, *lenPtr)
 
@@ -36,10 +38,8 @@ func InspectSlice(intSlice []int) {
 
 	fmt.Println("data:")
 
-	fmt.Printf("\t@%p: %T\n", arrayPtr, *arrayPtr)
-
 	for index := 0; index < *capPtr; index++ {
-		fmt.Printf("\t\t@%p: [%d] %T = %d\n",
+		fmt.Printf("\t@%p: [%d] %T = %d\n",
 			&(*arrayPtr)[index], index, (*arrayPtr)[index], (*arrayPtr)[index])
 	}
 
@@ -52,4 +52,10 @@ func main() {
 	intSlice[2] = 13
 
 	InspectSlice(intSlice)
+
+	for i := 1; i < 5; i++ {
+		intSlice = append(intSlice, 10*(13+i))
+		InspectSlice(intSlice)
+	}
+
 }
