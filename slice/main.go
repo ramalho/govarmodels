@@ -53,8 +53,8 @@ func main() {
 
 	InspectSlice(intSlice)
 
-	for i := 1; i < 5; i++ {
-		intSlice = append(intSlice, 10*(13+i))
+	for _, n := range []int{140, 150, 160} {
+		intSlice = append(intSlice, n)
 		InspectSlice(intSlice)
 	}
 
