@@ -5,6 +5,8 @@ import (
 	"unsafe"
 )
 
+// Based on Bill Kennedy's InspectSlice:
+// https://www.ardanlabs.com/blog/2013/12/three-index-slices-in-go-12.html
 func InspectSlice(intSlice []int) {
 
 	fmt.Println("intSlice:")
