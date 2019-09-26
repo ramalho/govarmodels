@@ -26,24 +26,28 @@ func InspectSlice(intSlice []int) {
 
 	// Get pointer to underlying array
 	// How to do this without hardcoding the array size?
-	arrayPtr := (*[100]int)(unsafe.Pointer(*(*uintptr)(slicePtr)))
+	arrayPtr := (*[100]int)(unsafe.Pointer(*(*uintptr)(slicePtr))) // ➊
 
 	fmt.Println("intSlice:")
 
-	// Not using %T on next line to show expected data array size
+	// %T displays *[100]int because it's the array size hardcoded at ➊
 	// fmt.Printf("\t@%p: data %T = %p\n", slicePtr, arrayPtr, arrayPtr)
+	// instead, I am using *[%d]int to display the size of the underlying
+	// array as given by *capPtr
 	fmt.Printf("\t@%p: data *[%d]int = %p\n", slicePtr, *capPtr, arrayPtr)
 
 	fmt.Printf("\t@%p: len %T = %d\n", lenPtr, *lenPtr, *lenPtr)
 
 	fmt.Printf("\t@%p: cap %T = %d\n", capPtr, *capPtr, *capPtr)
 
-	fmt.Println("data:")
+	/*
+		fmt.Println("data:")
 
-	for index := 0; index < *capPtr; index++ {
-		fmt.Printf("\t@%p: [%d] %T = %d\n",
-			&(*arrayPtr)[index], index, (*arrayPtr)[index], (*arrayPtr)[index])
-	}
+		for index := 0; index < *capPtr; index++ {
+			fmt.Printf("\t@%p: [%d] %T = %d\n",
+				&(*arrayPtr)[index], index, (*arrayPtr)[index], (*arrayPtr)[index])
+		}
+	*/
 
 }
 

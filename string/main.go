@@ -2,46 +2,59 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"unsafe"
 )
 
+func InspectString(source, aString string) {
 
-func InspectString(aString string) {
+	fmt.Println(source)
 
-	fmt.Println("aString:")
-	fmt.Printf("\t%#v\n", aString)
-
-	// Get stringPtr of string structure
+	// Make pointer to string structure
 	stringPtr := unsafe.Pointer(&aString)
 	ptrSize := unsafe.Sizeof(stringPtr)
 
-	// Compute address of len
+	// Make pointer to content
+	contentPtr := (*byte)(unsafe.Pointer(*(*uintptr)(stringPtr)))
+
+	// Compute address of len field
 	lenAddr := uintptr(stringPtr) + ptrSize
 
-	// Create pointer to len
+	// Make pointer to len field
 	lenPtr := (*int)(unsafe.Pointer(lenAddr))
 
-	fmt.Println("\naString:")
+	fmt.Println("\nheader struct:")
 
-	dataPtr := (*byte)(unsafe.Pointer(*(*uintptr)(stringPtr)))
-
-	fmt.Printf("\t@%p: data %T = %p\n", stringPtr, dataPtr, dataPtr)
+	fmt.Printf("\t@%p: data %T = %p\n", stringPtr, contentPtr, contentPtr)
 	fmt.Printf("\t@%p: len %T = %d\n", lenPtr, *lenPtr, *lenPtr)
 
 	fmt.Println("\ndata:")
 
 	for index := 0; index < len(aString); index++ {
-		byteAddr := uintptr(unsafe.Pointer(dataPtr)) + uintptr(index)
+		// Compute address to one byte of content
+		byteAddr := uintptr(unsafe.Pointer(contentPtr)) + uintptr(index)
+		// Make pointer to that byte of content
 		bytePtr := (*byte)(unsafe.Pointer(byteAddr))
 		fmt.Printf("\t@%p: %T = %d\n",
 			bytePtr, *bytePtr, *bytePtr)
 	}
-
-
+	fmt.Println(strings.Repeat("─", 60))
 }
 
 func main() {
 	aString := "ABC"
+	aStringCopy := aString
+	anotherString := "ABC"
 
-	InspectString(aString)
+	// Same data
+	InspectString(`aString := "ABC"`, aString)
+	InspectString(`aStringCopy := aString`, aStringCopy)
+	InspectString(`anotherString := "ABC"`, anotherString)
+
+	// Changing data
+	InspectString(`aString := "ABC"`, aString)
+	aString += "?"
+	InspectString(`aString += "?"`, aString)
+	aString += "!"
+	InspectString(`aString += "!"`, aString)
 }
