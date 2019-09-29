@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// TwilightBus makes passengers vanish
+// TwilightBus drops passengers to the 5th dimension
 type TwilightBus struct {
 	passengers []string
 }
@@ -19,6 +19,16 @@ func (bus *TwilightBus) Pick(name string) {
 	bus.passengers = append(bus.passengers, name)
 }
 
+// find needle in slice, returns index, found bool
+func find(slice []string, needle string) (int, bool) {
+	for i, item := range slice {
+		if item == needle {
+			return i, true
+		}
+	}
+	return -1, false
+}
+
 // remove item from slice, preserving order
 // from GOPL, sec. 4.2.2, p. 93
 func remove(slice []string, i int) []string {
@@ -28,15 +38,9 @@ func remove(slice []string, i int) []string {
 
 // Drop drops a named passenger
 func (bus *TwilightBus) Drop(name string) {
-	foundPos := -1
-	for i, current := range bus.passengers {
-		if current == name {
-			foundPos = i
-			break
-		}
-	}
-	if foundPos >= 0 {
-		bus.passengers = remove(bus.passengers, foundPos)
+	i, found := find(bus.passengers, name)
+	if found {
+		bus.passengers = remove(bus.passengers, i)
 	}
 }
 
